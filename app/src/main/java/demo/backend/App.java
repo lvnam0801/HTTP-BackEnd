@@ -3,6 +3,8 @@
  */
 package demo.backend;
 
+import static spark.Spark.*;
+
 public class App {
     public String getGreeting() {
         return "Starting...";
@@ -10,5 +12,12 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+
+        // HTTP method:
+        // GET, POST, PUT, DELETE: read, create, update, delete (CURL)
+        get("/read", (req, res) -> "Read");
+        post("/create", (req, res) -> "Create");
+        put("/update", (req, res) -> "Update");
+        delete("/delete", (req, res) -> "Delete");
     }
 }
