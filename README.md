@@ -23,28 +23,18 @@
     - 404: client error
     - 500: server error
 
-# Project Information (!TODO)
-## Tools build: Gradle 7.5.1
-- gradle init: initialize project
-- gradle build: build project
-- gradle run (--stacktrace option): run project
+# Programming
 
-## Libraries (!TODO)
-- HTTP Server: Sparkjava
-- Lombok: Project Lombok is a java library that automatically plugs into editor and build tools, spicing up your java.
+## Database connection: 
 
+### DriverManager in JDBC
 
-## Entity: Contain data of object(Instance)
-- User: Contains user information(represents user data in database).
-
-## Model: Perform operations and logic on the respective entities
-- UserModel: Performs operations on user entitys.
-
-## Connect database with DriverManager in JDBC
 - **JDBC (Java Database Connectivity)**: is the API that manages connecting to a database, issuing queries and commands, and handing results set obtained from the database.
+
 - **DriverManager**: This fully implemented class connects an application to a data source, which is specified by a database URL.
-    > For each request, establish a connection with database through DriverManager in JDBC connector. Execute query, modify or update. Once done, close the connection.
-    ```
+    > For each request, establish a connection with the database through DriverManager in the JDBC connector. Execute the query, modify or update. Once done, close the connection.
+
+    ```java
     String databaseURL = "jdbc:mysql://localhost:3306/demo";
     String userName = "username";
     String password = "password";
@@ -81,4 +71,48 @@
                 e.printStackTrace();
             }
         }
-    }```
+    }
+    ```
+
+### Database Connection Pool(!TODO)
+*A connection pool is a cache of database connections maintained so that the connections can be reused when future requests to the database required.*
+
+## Singleton pattern
+
+*The singleton pattern is a software design pattern the retricts instantiation of class to one "single" instance. This is useful when exactly one object is needed to coordinate actions across the system.*
+
+### Implementations 
+
+Implementations of singleton pattern must :
+- Ensure that only one instance of singleton class ever exist.
+- Provide global access to that instance.
+
+Typically, this is done by :
+- Declaring all constructor of class to be private.
+- Providing a static method that return a reference to the instance.
+
+# Project Information (!TODO)
+## Tools build: Gradle 7.5.1
+- gradle init: initialize project
+- gradle build: build project
+- gradle run (--stacktrace option): run project
+
+## Sparkjava (!TODO)
+*Sparkjava is a http server.*
+
+## Hikari(!TODO)
+*Hikari is JDBC connection pool.*
+
+- DataSource: A DataSource object provides a new way for JDBCs clients to obtain a DBMS connection.
+
+## Libraries (!TODO)
+- HTTP Server: Sparkjava
+- Lombok: Project Lombok is a java library that automatically plugs into editor and build tools, spicing up your java.
+
+
+## Entity: Contain data of object(Instance)
+- User: Contains user information(represents user data in database).
+
+## Model: Perform operations and logic on the respective entities
+- UserModel: Performs operations on user entitys.
+- DbCpModel: Contains Connection Pool, manages get connection to database.

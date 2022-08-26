@@ -26,7 +26,8 @@ dependencies {
     // Lombook
     compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    // Mysql connector
+    // Database connection pool and driverClassName in database connector library
+    implementation "com.zaxxer:HikariCP:5.0.1"
     implementation 'mysql:mysql-connector-java:8.0.30'
 }
 
