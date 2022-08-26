@@ -3,7 +3,12 @@
  */
 package demo.backend;
 
-import static spark.Spark.*;
+import static spark.Spark.delete;
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.put;
+
+import demo.backend.model.UserModel;
 
 public class App {
     public String getGreeting() {
@@ -13,11 +18,36 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
-        // HTTP method:
-        // GET, POST, PUT, DELETE: read, create, update, delete (CURL)
-        get("/read", (req, res) -> "Read");
-        post("/create", (req, res) -> "Create");
-        put("/update", (req, res) -> "Update");
-        delete("/delete", (req, res) -> "Delete");
+        /**
+         * Http methods: 
+         * GET, POST, PUT, DELETE: read, create, update, delete (CURL)
+         */
+        get("/read", (req, res) -> {
+            Integer userId = Integer.parseInt(req.queryParams("userId"));
+            UserModel userModel = new UserModel();
+            return userModel.read(userId);
+        });
+
+        post("/create", (req, res) -> {
+            Integer userId = Integer.parseInt(req.queryParams("userId"));
+            String name = req.queryParams("name");
+            Integer age = Integer.parseInt(req.queryParams("age"));
+            UserModel userModel = new UserModel();
+            return userModel.create(userId, name, age);
+        });
+
+        put("/update", (req, res) -> {
+            Integer userId = Integer.parseInt(req.queryParams("userId"));
+            String name = req.queryParams("name");
+            Integer age = Integer.parseInt(req.queryParams("age"));
+            UserModel userModel = new UserModel();
+            return userModel.update(userId, name, age);
+        });
+        
+        delete("/delete", (req, res) -> {
+            Integer userId = Integer.parseInt(req.queryParams("userId"));
+            UserModel userModel = new UserModel();
+            return userModel.delete(userId); 
+        });
     }
 }
