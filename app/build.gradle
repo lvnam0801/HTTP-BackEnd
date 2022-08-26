@@ -23,6 +23,9 @@ dependencies {
     // Common library
     implementation 'com.google.guava:guava:31.0.1-jre'
 
+    // Http server
+    implementation "com.sparkjava:spark-core:2.9.4"
+
     
 }
 
