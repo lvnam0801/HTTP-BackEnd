@@ -19,14 +19,15 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-
     // Common library
     implementation 'com.google.guava:guava:31.0.1-jre'
-
     // Http server
     implementation "com.sparkjava:spark-core:2.9.4"
-
-    
+    // Lombook
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    // Mysql connector
+    implementation 'mysql:mysql-connector-java:8.0.30'
 }
 
 application {
