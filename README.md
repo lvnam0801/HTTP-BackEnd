@@ -39,26 +39,16 @@ This fully implemented class connects an application to a data source, which is 
     > For each request, establish a connection with the database through DriverManager in the JDBC connector. Execute the query, modify or update. Once done, close the connection.
 
 ```java
-    String databaseURL = "jdbc:mysql://localhost:3306/demo";
-    String userName = "username";
-    String password = "password";
-    String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
-    User user = null;
     Connection conn = null;
     try {
         // connect with database using driverManager in jdbc
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection(databaseURL, userName, password);
-        PreparedStatement stmt = conn.prepareStatement(sqlQuery);
-        stmt.setInt(1, userId);
+        Class.forName("DriverName");
+        conn = DriverManager.getConnection(<databaseURL>, <userName>, <password>);
+        PreparedStatement stmt = conn.prepareStatement(<sqlQuery statement>);
         ResultSet rs = stmt.executeQuery();
-        user = new User();
-        // retrieve data in rs ResultSet
-        while (rs.next()) {
-            user.setUserId(rs.getInt("user_id"));
-            user.setName(rs.getString("name"));
-            user.setAge(rs.getInt("age"));
-        }
+        // DO SOMETHING
+        ...
+
     } catch (SQLException e) {
         e.printStackTrace();
         System.out.println("An error occurred. Maybe userName/password invalid");
@@ -95,10 +85,10 @@ This fully implemented class connects an application to a data source, which is 
     private DbCpModel() {
         // config HikariCp connection pool
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
-        config.setUsername("lvnam");
-        config.setPassword("nam0801");
+        config.setDriverClassName("<driverName>");
+        config.setJdbcUrl("<url>");
+        config.setUsername("usernName");
+        config.setPassword("password");
         // implement datasource object
         ds = new HikariDataSource(config);
     }
@@ -108,6 +98,12 @@ This fully implemented class connects an application to a data source, which is 
 ## Singleton pattern
 
 *The singleton pattern is a software design pattern the retricts instantiation of class to one "single" instance. This is useful when exactly one object is needed to coordinate actions across the system.*
+
+- Singleton for `UserModel class`: **(!TODO)** Advantage ??? If not using singleton design pattern???
+
+- SingletonHolder : **(!TODO)** Advantage? Disadvantage
+
+- All fields and method is static. (!TODO) Advantage? Disadvantage
 
 ### Implementations 
 
@@ -119,6 +115,8 @@ Typically, this is done by :
 - Declaring all constructor of class to be private.
 - Providing a static method that return a reference to the instance.
 
+## Lazy load(!TODO)
+
 # Project Information (!TODO)
 ## Tools build: Gradle 7.5.1
 - gradle init: initialize project
@@ -127,6 +125,8 @@ Typically, this is done by :
 
 ## Sparkjava (!TODO)
 *Sparkjava is a http server.*
+
+**My job: Provide implementation of functional interface(Interface Route) in Spark**.
 
 ## Hikari(!TODO)
 *Hikari is JDBC connection pool.*
@@ -141,8 +141,19 @@ Typically, this is done by :
 
 ## Entity: Contain data of object(Instance)
 - User: Contains user information(represents user data in database).
-- Http Response: 
+- Http Response: (!TODO)
 
 ## Model: Perform operations and logic on the respective entities
 - UserModel: Performs operations on user entitys.
 - DbCpModel: Contains Connection Pool, manages get connection to database.
+
+## Wrap Http methods of SparkJava
+- Wrap http methods of SparkJava into HttpServer: 
+    - Implement `Functional Interface Route`(*Override handle abtract method*) by `HttpServer.process(...)` method.
+    - Catch Exceptions of methods in `UserModel` in `HttpServer.process` method.
+- Service : ???
+
+
+# QUESTION
+- What is difference between static and non-static when first run program.
+- What is difference between thread and process when parallel requests request at the same time.
