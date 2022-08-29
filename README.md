@@ -25,16 +25,20 @@
 
 # Programming
 
-## Database connection: 
+## Database connection:
+
+- **JDBC (Java Database Connectivity)**: is the API that manages connecting to a database, issuing queries and commands, and handing results set obtained from the database, helps user to interact or communication with various databse.
+
 
 ### DriverManager in JDBC
 
-- **JDBC (Java Database Connectivity)**: is the API that manages connecting to a database, issuing queries and commands, and handing results set obtained from the database.
+- DriverManger class is the component of JDBC API and also member of the java.sql package. The DriverManager class acts as an interface between users and drivers.
 
-- **DriverManager**: This fully implemented class connects an application to a data source, which is specified by a database URL.
+- **Database connection**: 
+This fully implemented class connects an application to a data source, which is specified by a database URL.
     > For each request, establish a connection with the database through DriverManager in the JDBC connector. Execute the query, modify or update. Once done, close the connection.
 
-    ```java
+```java
     String databaseURL = "jdbc:mysql://localhost:3306/demo";
     String userName = "username";
     String password = "password";
@@ -72,10 +76,34 @@
             }
         }
     }
-    ```
+```
 
-### Database Connection Pool(!TODO)
+### DataSource in JDBC
+- **Connection Pool(!TODO)**
+
 *A connection pool is a cache of database connections maintained so that the connections can be reused when future requests to the database required.*
+
+```java
+    // Datasource object to get connection in connection pool
+    private HikariDataSource ds;
+
+    // get a connection of connection pool
+    public Connection getConnection() throws SQLException{
+        return ds.getConnection();
+    }
+
+    private DbCpModel() {
+        // config HikariCp connection pool
+        HikariConfig config = new HikariConfig();
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/demo");
+        config.setUsername("lvnam");
+        config.setPassword("nam0801");
+        // implement datasource object
+        ds = new HikariDataSource(config);
+    }
+```
+**HikariCp(Hikari connection pool)**: HikariCp is a implementation of JDBC DataSource, provides connection pools mechanism. 
 
 ## Singleton pattern
 
@@ -108,10 +136,12 @@ Typically, this is done by :
 ## Libraries (!TODO)
 - HTTP Server: Sparkjava
 - Lombok: Project Lombok is a java library that automatically plugs into editor and build tools, spicing up your java.
+- Gson: is Java library that can be convert Java Object to into their JSON representation. It also can be used to conver a JSON string to an equivalent Java object.
 
 
 ## Entity: Contain data of object(Instance)
 - User: Contains user information(represents user data in database).
+- Http Response: 
 
 ## Model: Perform operations and logic on the respective entities
 - UserModel: Performs operations on user entitys.
