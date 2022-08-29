@@ -1,7 +1,5 @@
 package demo.backend.library.entity;
 
-import java.sql.ResultSet;
-
 import com.google.gson.Gson;
 
 public class BaseEntity extends Object{
@@ -10,10 +8,4 @@ public class BaseEntity extends Object{
         Gson gson = new Gson();
         return gson.toJson(this);
     }
-
-    public BaseEntity setRs(ResultSet rs){
-        
-        return this;
-    }
-
 }

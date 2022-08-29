@@ -1,4 +1,4 @@
-package demo.backend.model;
+package demo.backend.library.model;
 /*
  * Use HikariCp to create connection pool.
  * Use Sington Pattern to manages connections.
