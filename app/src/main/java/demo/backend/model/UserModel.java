@@ -6,161 +6,169 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import demo.backend.entity.User;
+import demo.backend.library.entity.HttpResponse;
 
 public class UserModel {
     // read data from database with key=userId
-    public User read(Integer userId) {
+    public HttpResponse read(Integer userId) {
 
         String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+        HttpResponse res = new HttpResponse();
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        User user = null;
+        try (
+                Connection conn = DbCpModel.getInst().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sqlQuery);) {
 
-        try {
-            conn = DbCpModel.getInst().getConnection();
-            stmt = conn.prepareStatement(sqlQuery);
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
-            user = new User();
+
             // retrieve data in rs ResultSet
-            while (rs.next()) {
+            if (rs.next()) {
+                // get data in resultset rs after query data from database
+                User user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setName(rs.getString("name"));
                 user.setAge(rs.getInt("age"));
+
+                // set response data if request is successfull
+                res.code = 0;
+                res.data = user;
+                res.message = "Success";
+            } else {
+                // set response of data is not found in database
+                res.code = 1;
+                res.data = null;
+                res.message = "User not found";
             }
         } catch (SQLException e) {
+            // set data for res if error from database connection
+            res.code = -1;
+            res.data = null;
+            res.message = "Server error";
+
+            // print message of Exception to screen for debug
             e.printStackTrace();
             System.out.println("An error occurred. Maybe userName/password invalid");
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Can not close Connection/PrepareStatemet");
-                System.out.println(e.getMessage());
-            }
         }
-        return user;
+        return res;
     }
 
     // insert data into database
-    public User create(Integer userId, String name, Integer age) {
-        String sqlUpdate = "INSERT INTO user(user_id, name, age) VALUES(?, ?, ?)";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        User user = null;
+    public HttpResponse create(Integer userId, String name, Integer age) {
 
-        try {
-            conn = DbCpModel.getInst().getConnection();
-            stmt = conn.prepareStatement(sqlUpdate);
+        String sqlUpdate = "INSERT IGNORE INTO user(user_id, name, age) VALUES(?, ?, ?)";
+        HttpResponse res = new HttpResponse();
+
+        try (
+                Connection conn = DbCpModel.getInst().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sqlUpdate);) {
+
             stmt.setInt(1, userId);
             stmt.setString(2, name);
             stmt.setInt(3, age);
             Integer suc = stmt.executeUpdate();
 
+            // assing result to response object
             if (suc == 1) {
-                user = new User(userId, name, age);
+                User user = new User(userId, name, age);
+                // set Response result for successful
+                res.code = 0;
+                res.data = user;
+                res.message = "Create user successfully";
+
+            } else {
+                res.code = 1;
+                res.data = null;
+                res.message = "Create user failed";
             }
         } catch (SQLException e) {
+            // set data for res if error from database connection
+            res.code = -1;
+            res.data = null;
+            res.message = "Server error";
+
+            // print message of Exception to screen for debug
             e.printStackTrace();
             System.out.println("An error occurred. Maybe userName/password invalid");
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Can not close Connection/PrepareStatemet");
-                System.out.println(e.getMessage());
-            }
         }
-        return user;
+        return res;
     }
 
     // update data into database
-    public User update(Integer userId, String name, Integer age) {
+    public HttpResponse update(Integer userId, String name, Integer age) {
         String sqlUpdate = "UPDATE user SET name = ?, age = ? WHERE user_id = ?";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        User user = null;
+        HttpResponse res = new HttpResponse();
 
-        try {
-            conn = DbCpModel.getInst().getConnection();
-            stmt = conn.prepareStatement(sqlUpdate);
+        try (
+                Connection conn = DbCpModel.getInst().getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sqlUpdate);) {
+
             stmt.setInt(3, userId);
             stmt.setString(1, name);
             stmt.setInt(2, age);
             Integer suc = stmt.executeUpdate();
 
             if (suc == 1) {
-                user = new User(userId, name, age);
+                User user = new User(userId, name, age);
+                // if request is performed successfully
+                res.code = 0;
+                res.data = user;
+                res.message = "Update user successfully";
+            } else {
+                res.code = 1;
+                res.data = null;
+                res.message = "Update user failed";
             }
         } catch (SQLException e) {
+            // set data for res if error from database connection
+            res.code = -1;
+            res.data = null;
+            res.message = "Server error";
+
+            // print message of Exception to screen for debug
             e.printStackTrace();
-            System.out.println("An error occurred. Maybe username/password invalid");
+            System.out.println("An error occurred. Maybe userName/password invalid");
             System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Can not close Connection/PrepareStatemet");
-                System.out.println(e.getMessage());
-            }
         }
-        return user;
+        return res;
     }
 
     // delete data in database
-    public User delete(Integer userId) {
-        String sqlUpdate = "DELETE FROM user WHERE user_id= ?";
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        User user = null;
+    public HttpResponse delete(Integer userId) {
+        String sqlUpdate = "DELETE FROM user WHERE user_id= ?"; 
+        HttpResponse res = new HttpResponse();
+        try (
+            Connection conn = DbCpModel.getInst().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sqlUpdate);){
 
-        try {
-            conn = DbCpModel.getInst().getConnection();
-            stmt = conn.prepareStatement(sqlUpdate);
             stmt.setInt(1, userId);
             Integer suc = stmt.executeUpdate();
+
             if (suc == 1) {
-                user = new User(userId, null, null);
+                User user = new User(userId, null, null);
+                // If delete user successfully
+                res.code = 0;
+                res.data = user;
+                res.message = "Delete user successfully";
+            }
+            else{
+                res.code = 1;
+                res.data = null;
+                res.message = "Delete user failed";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("An error occurred. Maybe username/password invalid");
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-                if (stmt != null) {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Can not close Connection/PrepareStatemet");
-                System.out.println(e.getMessage());
-            }
+           // set data for res if error from database connection
+           res.code = -1;
+           res.data = null;
+           res.message = "Server error";
+
+           // print message of Exception to screen for debug
+           e.printStackTrace();
+           System.out.println("An error occurred. Maybe userName/password invalid");
+           System.out.println(e.getMessage());
         }
-        return user;
+        return res;
     }
 }
