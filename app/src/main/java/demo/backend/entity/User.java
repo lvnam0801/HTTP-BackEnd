@@ -1,17 +1,16 @@
 package demo.backend.entity;
 
+import demo.backend.library.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class User {
+public class User extends BaseEntity {
     private Integer userId;
     private String name;
     private Integer age;
