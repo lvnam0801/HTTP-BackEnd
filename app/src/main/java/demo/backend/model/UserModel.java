@@ -9,6 +9,29 @@ import demo.backend.entity.User;
 import demo.backend.library.entity.HttpResponse;
 
 public class UserModel {
+    
+    // ----------------Singleton Design Pattern---------------------
+    private static UserModel INST = null;
+    // private constructor
+    private UserModel(){
+    }
+
+    // Lazy Load technique
+    // create get instance for one instace of class (parallel request processing)
+    public static UserModel getInst(){
+        if(INST != null){
+            return INST;
+        }else{
+            // parallel initialize processing
+            synchronized(UserModel.class){
+                if(INST == null){
+                    INST = new UserModel();
+                }
+                return INST;
+            }
+        }
+    }
+    
     // read data from database with key=userId
     public HttpResponse read(Integer userId) {
 
