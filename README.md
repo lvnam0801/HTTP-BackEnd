@@ -30,6 +30,7 @@
 ## Database connection:
 
 - **JDBC (Java Database Connectivity)**: is the API that manages connecting to a database, issuing queries and commands, and handing results set obtained from the database, helping users to interact or communication with various database.
+
 ![alt text](./images/desigOfJdbc.png)
 
 - *Java Application*: is a progarm written in Java that is executed stand-alone either in a client or a server.
