@@ -1,6 +1,6 @@
 package demo.backend.entity;
 
-import demo.backend.library.entity.BaseEntity;
+import demo.library.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

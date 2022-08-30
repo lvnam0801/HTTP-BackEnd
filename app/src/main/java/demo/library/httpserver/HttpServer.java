@@ -1,6 +1,6 @@
-package demo.backend.library.httpserver;
+package demo.library.httpserver;
 
-import demo.backend.library.entity.HttpResponse;
+import demo.library.entity.HttpResponse;
 import spark.Request;
 import spark.Response;
 import spark.Spark;

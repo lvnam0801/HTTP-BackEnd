@@ -1,4 +1,4 @@
-package demo.backend.library.entity;
+package demo.library.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

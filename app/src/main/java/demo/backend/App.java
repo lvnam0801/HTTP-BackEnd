@@ -3,8 +3,8 @@
  */
 package demo.backend;
 
-import demo.backend.library.httpserver.HttpServer;
 import demo.backend.model.UserModel;
+import demo.library.httpserver.HttpServer;
 
 public class App {
     public String getGreeting() {
