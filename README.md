@@ -25,9 +25,9 @@
     - 404: client error
     - 500: server error
 
-# Programming
 
-## Database connection:
+
+# Database connection:
 
 - **JDBC (Java Database Connectivity)**: is the API that manages connecting to a database, issuing queries and commands, and handing results set obtained from the database, helping users to interact or communication with various database.
 
@@ -42,7 +42,7 @@
 
 **(Brige Desgin Pattern???)**
 
-### DriverManager in JDBC
+## DriverManager in JDBC
 
 - DriverManager class is the component of JDBC API and also member of the java.sql package. 
 - The Driver Manager class is the traditional management layer of JDBC, working between the Java Application and drivers. It keeps track of the drivers that are available and handle establishing a connection between database and the appropriate driver. In addition, the DriverManager class attends to things like driver login time limits and the printing of log and trace messages.
@@ -52,41 +52,52 @@
 This fully implemented class connects an application to a data source, which is specified by a database URL.
     > For each request, establish a connection with the database through DriverManager in the JDBC connector. Execute the query, modify or update. Once done, close the connection.
 
-```java
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    try {
-        // connect with database using driverManager in jdbc
-        Class.forName("DriverName");
-        conn = DriverManager.getConnection(<databaseURL>, <userName>, <password>);
-        stmt = conn.prepareStatement(<sqlQuery statement>);
-        ResultSet rs = stmt.executeQuery();
-        // DO SOMETHING
-        ...
+    ```java
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            // connect with database using driverManager in jdbc
+            Class.forName("DriverName");
+            conn = DriverManager.getConnection(<databaseURL>, <userName>, <password>);
+            stmt = conn.prepareStatement(<sqlQuery statement>);
+            ResultSet rs = stmt.executeQuery();
+            // DO SOMETHING
+            ...
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        System.out.println("An error occurred. Maybe userName/password invalid");
-        System.out.println(e.getMessage());
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-        System.out.println("Could not find database driver class");
-        System.out.println(e.getMessage());
-    } finally {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("An error occurred. Maybe userName/password invalid");
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Could not find database driver class");
+            System.out.println(e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
-    }
-```
+    ```
 
-### DataSource in JDBC
-- **Connection Pool(!TODO)**
+## DataSource in JDBC
+> Java DataSource 
+*Java DataSource is approach loose coupling for connectivity so that we can switch database easily, connection pooling for transaction management and distribution systems support.*
+- `Java DataSource interface` is present in javax.sql pakage and it only declare two overleaded methods `getConnection()` and `getConnection(String str1, String str2)`.
 
-*A connection pool is a cache of database connections maintained so that the connections can be reused when future requests to the database required.*
+> JDBC DataSource
+- It is the reposibility of difference Database vendors to provide difference kinds of implementation of DataSource Interface. For example: `com.mysql.jdbc.jdbc2.optional.MysqlDataSource` class and Oracle database driver implement it with `oracle.jdbc.pool.OracleDataSource` class. . These implementation classes provide methods through which we can provide database server details with user credentials. Some of the other common features provided by these JDBC DataSource implementation classes are:
+    - Catch of PreparedStatement for faster processig.
+    - Connection timeout settings.
+    - Logging features.
+    - ResultSet maximum size threshold.
+
+**Connection Pool**
+
+- *A connection pool is a cache of database connections maintained so that the connections can be reused when future requests to the database required.*
 
 - Connection Pooling is a technique used for the reuse of physical connections and reducing overhead for an application. Connection pooling functionality minimizes expensive operations in the creation and closing of sessions on connections. Database vendors help multiple clients to share a cached set of connection objects that provides access to a database. The client does need not to create connection every time to interact with the database.
 
@@ -110,29 +121,50 @@ This fully implemented class connects an application to a data source, which is 
         ds = new HikariDataSource(config);
     }
 ```
-**HikariCp(Hikari connection pool)**: HikariCp is a implementation of JDBC DataSource, provides connection pools mechanism. 
+- Example for DataSource: HikariCp(Hikari connection pool) is an implementation of JDBC DataSource, which provides a connection pools mechanism. 
 
+# Programming
 ## Singleton pattern
 
 *The singleton pattern is a software design pattern the retricts instantiation of class to one "single" instance. This is useful when exactly one object is needed to coordinate actions across the system.*
 
-- Singleton for `UserModel class`: **(!TODO)** Advantage ??? If not using singleton design pattern???
+- **Singleton for `DbCpModel`**:
+    - The connection pool technique reduces the overhead of creating and closing of connections by making connections available in the pool. Java application does need no to craete a connection every time interact with the database. Thanks to it improve response time of any application that requires connections.
+    - Avalible connections in pool occupy a part of system resource.
+    - If Instances of DbCpModel are freely instantiated (No control) result to very system resource are accupied(Very resource intensive).
+    - Singleton Pattern ensures only one connection pool.
 
-- SingletonHolder : **(!TODO)** Advantage? Disadvantage
+- **Singleton for `UserModel`**: **(!TODO)**    
+    - Advantage ??? 
+    - If not using singleton design pattern???
 
-- All fields and method is static. (!TODO) Advantage? Disadvantage
+- SingletonHolder : **(!TODO)** 
+    - Advantage? 
+    - Disadvantage
+
+- All fields and method is static. (!TODO) 
+    - Advantage? 
+    - Disadvantage
+
 
 ### Implementations 
 
-Implementations of singleton pattern must :
+> Implementations of singleton pattern must :
 - Ensure that only one instance of singleton class ever exist.
 - Provide global access to that instance.
 
-Typically, this is done by :
+> Typically, this is done by :
 - Declaring all constructor of class to be private.
 - Providing a static method that return a reference to the instance.
 
 ## Lazy load(!TODO)
+- In UserModel and DbCpModel singlton class, INST is the only instace of class. 
+- The instance is not implemented when program is started until the first request for a resource occurs.
+
+**Advantage**
+- *Reduces initial load time*: lazy loading a webpage reduce page weight, allowing for quicker page load time. 
+- *Bandwith conservation*: Lazy loading conserves bandwith by delivering contents to user only if it's requested.
+- *Systems resource usage*: Lazy loading conserver both server and clinet resource, because something of images, JavaScrpit or other code actually need to be rendered or executed.
 
 # Project Information (!TODO)
 ## Tools build: Gradle 7.5.1
@@ -140,29 +172,43 @@ Typically, this is done by :
 - gradle build: build project
 - gradle run (--stacktrace option): run project
 
-## Sparkjava (!TODO)
-*Sparkjava is a http server.*
+## Sparkjava
+- SparkJava is a http server
+- [SparkJava Documentation](https://sparkjava.com/documentation#views-and-templates)
 
-**My job: Provide implementation of functional interface(Interface Route) in Spark**.
+
+- **My job: Provide implementation of functional interface(Interface Route) in Spark**.
 
 ## HikariCp(!TODO)
-*HikariCp is JDBC connection pool.*
+- *HikariCp is JDBC connection pool.*
 
 - DataSource: A DataSource object provides a new way for JDBCs clients to obtain a DBMS connection.
+
+- [HikariCp Documentation](https://github.com/brettwooldridge/HikariCP)
 
 ## Libraries (!TODO)
 - HTTP Server: Sparkjava
 - Lombok: Project Lombok is a java library that automatically plugs into editor and build tools, spicing up your java.
 - Gson: is Java library that can be convert Java Object to into their JSON representation. It also can be used to conver a JSON string to an equivalent Java object.
+- HikariCp: Database connection pool
+- MySql-Connector: contain mysql driver class.
 
 
-## Entity: Contain data of object(Instance)
+## Entity: Contain data of object
 - User: Contains user information(represents user data in database).
 - Http Response: (!TODO)
 
 ## Model: Perform operations and logic on the respective entities
 - UserModel: Performs operations on user entitys.
 - DbCpModel: Contains Connection Pool, manages get connection to database.
+
+## Cache
+*Reduce response time to clinet if data already in cache/*
+- Cache in UserModel: store user data to respond for the request, if data already exists in the cache, it does not need to query to the database.
+- Cache in DbCpModel is Connection Pool.
+
+## Library
+- Router is functional interface which throws Exception(alternative Route Functional Interface in spark library).
 
 ## Wrap Http methods of SparkJava
 - Wrap http methods of SparkJava into HttpServer: 
