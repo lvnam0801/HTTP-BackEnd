@@ -167,6 +167,9 @@ This fully implemented class connects an application to a data source, which is 
 - *Systems resource usage*: Lazy loading conserver both server and clinet resource, because something of images, JavaScrpit or other code actually need to be rendered or executed.
 
 # Project Information (!TODO)
+
+## Language: Java - OpenJDK 11.0.16
+
 ## Tools build: Gradle 7.5.1
 - gradle init: initialize project
 - gradle build: build project
@@ -210,12 +213,18 @@ This fully implemented class connects an application to a data source, which is 
 ## Library
 - Router is functional interface which throws Exception(alternative Route Functional Interface in spark library).
 
-## Wrap Http methods of SparkJava
+## Wrap Http methods of SparkJava into HttpServer Class
 - Wrap http methods of SparkJava into HttpServer: 
     - Implement `Functional Interface Route`(*Override handle abtract method*) by `HttpServer.process(...)` method.
     - Catch Exceptions of methods in `UserModel` in `HttpServer.process` method.
 - Service : ???
 
+# Addtional Information
+## Variable naming conventions
+- **Pascal**: VariableName   - Class(Java, Python, Js, C++)
+- **camel**: variableName    - method, function, variable(Java, Js)
+- **snake_case**: variable_Name  - method, function, varible(python); column name(MyySQL)
+- **kebab-case**: variable-Name  - variable(css), linux-path
 
 # QUESTION
 - What is difference between static and non-static when first run program.

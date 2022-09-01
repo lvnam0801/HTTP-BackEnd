@@ -36,6 +36,7 @@ public class UserModel {
 
     // read data from database with key=userId
     public HttpResponse read(Integer userId) throws SQLException {
+        System.out.println(userCache);
 
         HttpResponse res = new HttpResponse(0, null, "User not found");
         // find the user data in userCache first, if not found, then perform a query in
@@ -49,20 +50,14 @@ public class UserModel {
         DbCpModel.getInst().executeQuery(sqlQuery,
                 (rs) -> {
                     // get data in resultset rs after query data from database
-                    User user = new User();
-                    user.setUserId(rs.getInt("user_id"));
-                    user.setName(rs.getString("name"));
-                    user.setAge(rs.getInt("age"));
-
-                    // set response data if request is successfull
-                    res.code = 0;
-                    res.data = user;
-                    res.message = "Success";
-
+                    User user = new User(rs);
+                    // set Response result for successful
+                    res.setCode(0)
+                            .setData(user)
+                            .setMessage("Success");
                     // if data user is founded, add to userCache
                     userCache.put(userId, res);
                 }, userId);
-
         return res;
     }
 
@@ -81,10 +76,9 @@ public class UserModel {
         if (suc == 1) {
             User user = new User(userId, name, age);
             // set Response result for successful
-            res.code = 0;
-            res.data = user;
-            res.message = "Success";
-
+            res.setCode(0)
+                    .setData(user)
+                    .setMessage("Success");
             // add new the user data to userCache
             userCache.put(userId, res);
         }
@@ -100,10 +94,10 @@ public class UserModel {
         Integer suc = DbCpModel.getInst().executeUpdate(sqlUpdate, name, age, userId);
         if (suc == 1) {
             User user = new User(userId, name, age);
-            // if request is performed successfully
-            res.code = 0;
-            res.data = user;
-            res.message = "Sucess";
+            // set Response result for successful
+            res.setCode(0)
+                    .setData(user)
+                    .setMessage("Success");
 
             // check if user data already exist in cache then update, if not put
             userCache.put(userId, res);
@@ -120,13 +114,13 @@ public class UserModel {
         Integer suc = DbCpModel.getInst().executeUpdate(sqlUpdate, userId);
         if (suc == 1) {
             User user = new User(userId, null, null);
-            // If delete user successfully
-            res.code = 0;
-            res.data = user;
-            res.message = "Delete user successfully";
+            // set Response result for successful
+            res.setCode(0)
+                    .setData(user)
+                    .setMessage("Success");
 
             // Delete data user in userCache
-            if(userCache.containsKey(userId)){
+            if (userCache.containsKey(userId)) {
                 userCache.remove(userId);
             }
         }

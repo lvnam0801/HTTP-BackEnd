@@ -1,2 +1,2 @@
 # Object Oriented Programming(OOP)
-- `public Map<> map = new ConcurrentHashMap<>`; 
+- `public Map<keyDataType, valueDataType> map = new ConcurrentHashMap<>`; 
