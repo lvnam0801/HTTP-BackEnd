@@ -199,14 +199,15 @@ This fully implemented class connects an application to a data source, which is 
 
 ## Entity: Contain data of object
 - User: Contains user information(represents user data in database).
-- Http Response: (!TODO)
+- Http Response: Contains content which return for clients after requested.
+- SqlEntity: For entity classes contain data query from the database.
 
 ## Model: Perform operations and logic on the respective entities
 - UserModel: Performs operations on user entitys.
 - DbCpModel: Contains Connection Pool, manages get connection to database.
 
 ## Cache
-*Reduce response time to clinet if data already in cache/*
+*Reduce response time to client if data already in cache/*
 - Cache in UserModel: store user data to respond for the request, if data already exists in the cache, it does not need to query to the database.
 - Cache in DbCpModel is Connection Pool.
 
@@ -217,7 +218,6 @@ This fully implemented class connects an application to a data source, which is 
 - Wrap http methods of SparkJava into HttpServer: 
     - Implement `Functional Interface Route`(*Override handle abtract method*) by `HttpServer.process(...)` method.
     - Catch Exceptions of methods in `UserModel` in `HttpServer.process` method.
-- Service : ???
 
 # Addtional Information
 ## Variable naming conventions

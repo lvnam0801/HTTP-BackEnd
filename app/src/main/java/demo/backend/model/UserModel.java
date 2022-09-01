@@ -1,10 +1,9 @@
 package demo.backend.model;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import demo.backend.entity.User;
+import demo.library.entity.CacheEntity;
 import demo.library.entity.HttpResponse;
 
 public class UserModel {
@@ -12,10 +11,38 @@ public class UserModel {
     // ----------------Singleton Design Pattern---------------------
     private static UserModel INST = null;
     // create cahe for User
-    private Map<Integer, HttpResponse> userCache = new HashMap<Integer, HttpResponse>();
+    // private Map<Integer, HttpResponse> userCache = new ConcurrentHashMap<Integer,
+    // HttpResponse>();
+    private CacheEntity<Integer, HttpResponse> userCache = new CacheEntity<Integer, HttpResponse>();;
 
     // private constructor
     private UserModel() {
+        userCache.loadData(() -> {
+            String sqlQuery = "SELECT * FROM user WHERE user_id = ?";
+            Integer userId = 0;
+            for (userId = 0; userId < 100; userId++) {
+                // Execute query with implement fuctional interface ConsumerEx
+                try {
+                    DbCpModel.getInst().executeQuery(sqlQuery,
+                            (rs) -> {
+                                // get data in resultset rs after query data from database
+                                User user = new User(rs);
+                                // set Response result for successful
+                                HttpResponse res = new HttpResponse();
+                                res.setCode(0)
+                                        .setData(user)
+                                        .setMessage("Success");
+                                // if data user is founded, add to userCache
+
+                                userCache.put(user.getUserId(), res);
+                            }, userId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                    System.out.println("Load Cache faild");
+                }
+            }
+        });
     }
 
     // Lazy Load technique
